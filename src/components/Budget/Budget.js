@@ -19,19 +19,21 @@ class Budget extends Component {
   }
 
   render() {
+    const {loading, purchases, budgetLimit} = this.props.budget
+    const {firstName, lastName} = this.props.user
     return (
       <Background>
-        {this.props.loading ? <Loading /> : null}
+        {loading ? <Loading /> : null}
         <div className='budget-container'>
-          <Nav firstName={this.props.user.firstName} lastName={this.props.user.lastName}/>
+          <Nav firstName={firstName} lastName={lastName}/>
           <div className='content-container'>
             <div className="purchases-container">
               <AddPurchase addPurchase={this.props.addPurchase}/>
-              <DisplayPurchases purchases={this.props.budget.purchases} removePurchase={this.props.removePurchase}/>
+              <DisplayPurchases purchases={purchases} removePurchase={this.props.removePurchase}/>
             </div>
             <div className='chart-container'>
-              <Chart1 purchases={this.props.budget.purchases} budgetLimit={this.props.budget.budgetLimit}/>
-              <Chart2 purchases={this.props.budget.purchases} />
+              <Chart1 purchases={purchases} budgetLimit={budgetLimit}/>
+              <Chart2 purchases={purchases} />
             </div>
           </div>
         </div>
@@ -39,10 +41,10 @@ class Budget extends Component {
     )
   }
 }
-function mapStateToProps(reduxState) {
+function mapStateToProps(state) {
   return {
-    budget: reduxState.budget,
-    user: reduxState.user
+    budget: state.budget,
+    user: state.user
   }
 }
 

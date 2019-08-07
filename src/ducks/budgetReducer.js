@@ -18,8 +18,9 @@ export const requestBudgetData = () => {
     }
 }
 
-export const addPurchase = () => {
-    let data = axios.post('/api/budget-data/purchase', {description: 'value', price: 'value', category: 'value'}).then(res => res.data)
+export const addPurchase = (price, description, category) => {
+    let data = axios.post('/api/budget-data/purchase', {description, price, category}).then(res => res.data)
+    console.log(data)
     return {
         type: ADD_PURCHASE,
         payload: data
@@ -27,7 +28,7 @@ export const addPurchase = () => {
 }
 
 export const removePurchase = (id) => {
-    let data = axios.post(`/api/budget-data/purchase/${id}`).then(res => res.data)
+    let data = axios.delete(`/api/budget-data/purchase/${id}`).then(res => res.data)
     return {
         type: REMOVE_PURCHASE,
         payload: data
@@ -35,19 +36,19 @@ export const removePurchase = (id) => {
 }
 
 export default function reducer(state = initialState, action) {
-    switch(REQUEST_BUDGET_DATA) {
+    switch(action.type) {
         case (REQUEST_BUDGET_DATA + '_PENDING'):
             return {...state, loading: true}
         case (REQUEST_BUDGET_DATA + '_FULFILLED'):
             return {...state, ...action.payload, loading: false}
-        case (ADD_PURCHASE + '_PENIDNG'):
+        case (ADD_PURCHASE + '_PENDING'):
             return {...state, loading: true}
         case (ADD_PURCHASE + '_FULFILLED'):
-            return {...state, ...action.payload, loading: false}
+            return {...state, purchases: action.payload, loading: false}
         case (REMOVE_PURCHASE + '_PENDING'):
             return {...state, loading: true}
         case (REMOVE_PURCHASE + '_FULFILLED'):
-            return {...state, ...action.payload, loading: false}
+            return {...state, purchases: action.payload, loading: false}
         default:
             return state
     }
